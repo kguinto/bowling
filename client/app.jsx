@@ -1,8 +1,6 @@
 class App extends React.Component {
   constructor (props) {
     super(props);
-
-
     let blankRounds = [];
     let roundTotals = [];
 
@@ -26,7 +24,10 @@ class App extends React.Component {
       roundTotals.push(-1);
     }
 
-    //setstate
+    this.setState = {
+      rounds: blankRounds,
+      roundTotals: roundTotals
+    };
   }
 
   render () {
