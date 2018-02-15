@@ -21,7 +21,15 @@ var Scoreboard = (props) => {
 }
 
 var Round = (props) => {
-  return (<div class="round">{props.score} {props.number}</div>);
+
+  return (
+    <div class={(props.number === 9) ? "round round10" : "round"}>
+      <div class="bowl1">7</div>
+      <div class="bowl2">2</div>
+      {(props.number === 9) ? <div class="bowl3" isTenthRound={false}>0</div> : <div />}
+      <div class="roundTotal">9</div>
+    </div>
+    );
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
