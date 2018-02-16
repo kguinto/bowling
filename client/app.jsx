@@ -24,13 +24,17 @@ class App extends React.Component {
     for (let i = 0; i < 10; i++) {
       let frame = frames[i];
 
-      if (frame[0] <= 0) {
+      if (frame[0] < 0) {
         frame[0] = pins;
+        //Strike: set frame[1] to 0
+        if (pins == 10) {
+          frame[1] = 0;
+        }
         break;
-      } else if (frame[1] <= 0) {
+      } else if (frame[1] < 0) {
         frame[1] = pins;
         break;
-      } else if (i === 9 && frame[2] <= 0) {
+      } else if (i === 9 && frame[2] < 0) {
         frame[2] = pins;
         break;
       }
@@ -89,12 +93,19 @@ var Scoreboard = (props) => {
 }
 
 var Frame = (props) => {
-  var bowl1 = (props.frame[0] >= 0) ? props.frame[0] : ' ';
-  var bowl2 = (props.frame[1] >= 0) ? props.frame[1] : ' ';
+  var bowl1 = (props.frame[0] >= 0) ? props.frame[0] : '';
+  var bowl2 = (props.frame[1] >= 0) ? props.frame[1] : '';
 
-  var bowl3 = (props.frame[2] >= 0) ? props.frame[2] : ' ';
+  var bowl3 = (props.frame[2] >= 0) ? props.frame[2] : '';
 
   var total = (props.total >= 0) ? props.total : '';
+
+  if(bowl1 == 10) {
+    bowl1 = 'X';
+    bowl2 = '';
+  } else if (Number.parseInt(bowl1) + Number.parseInt(bowl2) == 10) {
+    bowl2 = '/';
+  }
 
   return (
     <div class={(props.number === 9) ? "frame frame10" : "frame"}>
