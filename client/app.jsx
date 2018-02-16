@@ -5,7 +5,7 @@ class App extends React.Component {
     let frameTotals = [];
 
     for (let i = 0; i < 10; i++) {
-      blankFrames.push([0, -1, 0]);
+      blankFrames.push([-1, -1, -1]);
       frameTotals.push(1);
     }
 
@@ -18,6 +18,25 @@ class App extends React.Component {
 
   bowl(pins) {
     console.log('bowling', pins);
+    console.log(this.state.frames);
+    let frames = this.state.frames;
+
+    for (let i = 0; i < 10; i++) {
+      let frame = frames[i];
+
+      if (frame[0] <= 0) {
+        frame[0] = pins;
+        break;
+      } else if (frame[1] <= 0) {
+        frame[1] = pins;
+        break;
+      } else if (i === 9 && frame[2] <= 0) {
+        frame[2] = pins;
+        break;
+      }
+    }
+    this.setState({frames: frames});
+
   }
 
   resetFrames () {
