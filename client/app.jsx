@@ -96,30 +96,49 @@ var Scoreboard = (props) => {
 var Frame = (props) => {
   var bowl1 = (props.frame[0] >= 0) ? props.frame[0] : '';
   var bowl2 = (props.frame[1] >= 0) ?  props.frame[1] : '';
-
-  var bowl3 = (props.frame[2] >= 0) ?  props.frame[2] : '';
+  var bowl3 = '';
 
   var total = (props.total >= 0) ? props.total : '';
   if(props.number === 9) {
     console.log(props.frame);
   }
 
-  if(bowl1 == 10) {
+  if(bowl1 === 10 && props.number < 9) {
     bowl1 = 'X';
     bowl2 = '';
-  } else if (props.number < 9 && bowl1 + bowl2 == 10) {
+  } else if (props.number < 9 && bowl1 + bowl2 === 10) {
     bowl2 = '/';
   }
   
-  if (props.number == 9 && props.frame[0] == 10 && props.frame[1] == 10) {
-    // edge case: 10th frame, strikes on bowl 1 and 2
-    bowl2 = 'X';
-  } else if (props.number == 9 && bowl1 < 10 && bowl1 + bowl2 == 10) {
-    // edge case: 10th frame, no strike on bowl 1
-    bowl2 = '/';
-  } 
-  if(props.number == 9 && props.frame[2] === 10) {
-    bowl3 = 'X';
+
+  if (props.number === 9) {
+
+    if (bowl1 === 10) {
+      bowl1 = 'X';
+
+      if (props.frame[1] === 10) {
+        // edge case: 10th frame, strikes on bowl 1 and 2
+        bowl2 = 'X';
+
+        if(props.frame[2] === 10) {
+          bowl3 = 'X';
+        } else if (props.frame[2] >= 0) {
+          bowl3 = props.frame[2];
+        }
+      } else if (props.frame[1] + props.frame[2] === 10) {
+        bowl3 = '/';
+      } 
+    } else if (props.frame[0] + props.frame[1] === 10) {
+      // edge case: 10th frame, no strike on bowl 1
+      bowl2 = '/';
+
+      if(props.frame[2] === 10) {
+        bowl3 = 'X';
+      } else if (props.frame[2] >= 0) {
+        bowl3 = props.frame[2];
+      }
+    }
+
   }
 
   return (
