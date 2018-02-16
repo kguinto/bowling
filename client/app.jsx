@@ -26,15 +26,16 @@ class App extends React.Component {
 
       if (frame[0] < 0) {
         frame[0] = pins;
+
         //Strike: set frame[1] to 0
-        if (pins == 10) {
+        if (pins == 10 && i < 9) {
           frame[1] = 0;
         }
         break;
       } else if (frame[1] < 0) {
         frame[1] = pins;
         break;
-      } else if (i === 9 && frame[2] < 0) {
+      } else if (i === 9 && frame[2] < 0 && frame[0] + frame[1] >= 10) {
         frame[2] = pins;
         break;
       }
@@ -60,7 +61,7 @@ class App extends React.Component {
 
   handleSubmit (e) {
     e.preventDefault();
-    this.bowl(this.state.pinput);
+    this.bowl(Number.parseInt(this.state.pinput));
   }
 
   handleChange (e) {
@@ -94,17 +95,31 @@ var Scoreboard = (props) => {
 
 var Frame = (props) => {
   var bowl1 = (props.frame[0] >= 0) ? props.frame[0] : '';
-  var bowl2 = (props.frame[1] >= 0) ? props.frame[1] : '';
+  var bowl2 = (props.frame[1] >= 0) ?  props.frame[1] : '';
 
-  var bowl3 = (props.frame[2] >= 0) ? props.frame[2] : '';
+  var bowl3 = (props.frame[2] >= 0) ?  props.frame[2] : '';
 
   var total = (props.total >= 0) ? props.total : '';
+  if(props.number === 9) {
+    console.log(props.frame);
+  }
 
   if(bowl1 == 10) {
     bowl1 = 'X';
     bowl2 = '';
-  } else if (Number.parseInt(bowl1) + Number.parseInt(bowl2) == 10) {
+  } else if (props.number < 9 && bowl1 + bowl2 == 10) {
     bowl2 = '/';
+  }
+  
+  if (props.number == 9 && props.frame[0] == 10 && props.frame[1] == 10) {
+    // edge case: 10th frame, strikes on bowl 1 and 2
+    bowl2 = 'X';
+  } else if (props.number == 9 && bowl1 < 10 && bowl1 + bowl2 == 10) {
+    // edge case: 10th frame, no strike on bowl 1
+    bowl2 = '/';
+  } 
+  if(props.number == 9 && props.frame[2] === 10) {
+    bowl3 = 'X';
   }
 
   return (
@@ -112,7 +127,7 @@ var Frame = (props) => {
       <div class="bowl1">{bowl1}</div>
       <div class="bowl2">{bowl2}</div>
       {(props.number === 9) ? <div class="bowl3" isTenthFrame={false}>{bowl3}</div> : <div />}
-      <div class="frameTotal">{total}</div>
+      <div class="frameTotal">{props.number}</div>
     </div>
     );
 }
